@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <environments default="development">
+        <environment id="development">
+            <!--选择事务管理器-->
+            <transactionManager type="JDBC"/>
+            <!-- 配置数据库连接信息 -->
+            <dataSource type="POOLED">
+                <property name="driver" value="com.mysql.jdbc.Driver"/>
+                <property name="url" value="jdbc:mysql://localhost:3306/red_envelope"/>
+                <property name="username" value="root"/>
+                <property name="password" value="Jovaunn1"/>
+                <property name="poolMaximumActiveConnections" value="1100" />
+            </dataSource>
+        </environment>
+    </environments>
+
+    <mappers>
+        <!--告知映射文件方式1，一个一个的配置-->
+        <mapper resource="mapperXml/RedPacket.xml"/>
+        <mapper resource="mapperXml/UserRedPacket.xml"/>
+        <!-- 告知映射文件方式2，自动扫描包内的Mapper接口与配置文件
+         注意：此种方法要求mapper接口名称和mapper映射文件名称相同，且放在同一个目录中。-->
+        <!--<package name="czz.study.mapper"/>-->
+
+        <!--告知映射文件方式3，一个一个的配置-->
+        <!--注意：此种方法要求mapper接口名称和mapper映射文件名称相同，且放在同一个目录中。-->
+        <!--<mapper class="czz.study.mapper.UserMapper"/>-->
+
+        <!--方式2和方式3可能会出现
+           Exception in thread "main" org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): czz.study.mapper.UserMapper.getUser异常，解决方式在本文最下方
+    -->
+    </mappers>
+
+
+</configuration>

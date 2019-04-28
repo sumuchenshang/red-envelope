@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+功能接口映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="czz.study.Mapper.UserMapper"就是czz.study.Mapper(包名)+UserMapper
+ -->
+<mapper namespace="czz.study.dao.RedPacketDao">
+
+
+  <!--根据id查询得到一个user对象-->
+  <!--这里之所以用resultMap指定一个自己创建的User，而不是用resultType，使用已有的User类是因为：
+      如果用resultType，查询到的createTime跟updateTime为空，我推测是因为数据库中的两个字段类型为datetime,
+      mybatis将查询到的这两个数据进行映射时，没有将这两个指指定为LocalDateTime类型，所以查询到为null-->
+  <select id="getRedPacket" parameterType="Long" resultType="czz.study.domain.RedPacket">
+        select id, user_id userId, amount, send_date sendDate, total, unit_amount unitAmount,stock, version, note from r_red_packet where id = #{id}
+    </select>
+  <select id="getRedPacketForUpdate" parameterType="Long" resultType="czz.study.domain.RedPacket">
+        select id, user_id userId, amount, send_date sendDate, total, unit_amount unitAmount,stock, version, note from r_red_packet where id = #{id} for update
+    </select>
+
+  <!--扣减抢红包库存-->
+  <update id="decreaseRedPacket">
+      update r_red_packet set stock= stock-1 where id=#{id}
+    </update>
+
+  <!--扣减抢红包库存,根据版本-->
+  <update id="decreaseRedPacketForVersion">
+      update r_red_packet set stock= stock-1 ,version = version +1 where id=#{id} and version = #{version}
+    </update>
+
+</mapper>
