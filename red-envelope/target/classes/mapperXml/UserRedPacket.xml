@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+功能接口映射文件名，这样就能够保证namespace的值是唯一的
+例如namespace="czz.study.Mapper.UserMapper"就是czz.study.Mapper(包名)+UserMapper
+ -->
+<mapper namespace="czz.study.dao.UserRedPacketDao">
+
+
+  <!--插入抢红包信息-->
+  <insert id="grapRedPacket" useGeneratedKeys="true">
+      INSERT INTO r_user_red_packet(red_packet_id, user_id, amount, grab_time, note)
+      VALUES ( #{userRedPacket.redPacketId}, #{userRedPacket.userId}, #{userRedPacket.amount}, now(), #{userRedPacket.note});
+    </insert>
+
+
+</mapper>
