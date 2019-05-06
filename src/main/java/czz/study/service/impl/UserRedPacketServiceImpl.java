@@ -33,8 +33,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
         //但是当数据库请求的线程数变多或者下面延迟变大，超发现象就会变得严重
         return grapRedPacketForCommon(redPacketId, userId);
         //悲观锁抢红包方式  1000人抢950个红包 2890毫秒，3059毫秒，2708毫秒，很奇怪，按道理悲观锁的速度是不快的，
-        //我觉得主要是因为数量没上去，当我把人数设为2W，红包为1W时，悲观锁的速度就慢很多。同时，下面的延迟时间变大，
-        //差距也会变明显。
+        //我觉得可能的原因有两点：①mysql优化了锁同步的性能，②我这种抢乐观锁方式导致CAS自旋的概率变得很大，从而浪费更多的CPU资源，效率低于synchronized。
         // return grapRedPacketForUpdate(redPacketId, userId);
         //乐观锁抢红包方式  1000人抢950个红包 2806毫秒，剩余79个，3006毫秒，剩余82个，2761秒，125个
         // return grapRedPacketForVersion(redPacketId, userId);
@@ -215,7 +214,7 @@ public class UserRedPacketServiceImpl implements UserRedPacketService {
                 userRedPacket.setAmount(amount);
                 userRedPacket.setNote("抢红包" + redPacketId);
                 return userRedPacketDao.grapRedPacket(userRedPacket);
-            }else {
+            } else {
                 return FAILED;
 
             }
